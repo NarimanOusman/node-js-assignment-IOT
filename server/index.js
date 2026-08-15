@@ -62,13 +62,37 @@ app.get('/getUser/:id', async (req, res) => {
     }
 });
 
-app.put('/updateUser/:id', (req, res) => {
-    const id = req.params.id;
-    UserModel.findByIdAndUpdate({ _id: id }, {
-        name: req.body.name,
-        email: req.body.email,
-        age: req.body.age
-    })
-    .then(users => res.json(users))
-    .catch(err => res.json(err));
+app.put('/updateUser/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const updatedUser = await User.findByIdAndUpdate(
+            { _id: id }, 
+            {
+                name: req.body.name,
+                email: req.body.email,
+                age: req.body.age
+            },
+            { new: true } 
+        );
+        res.json(updatedUser);
+    } catch (error) {
+        console.error("Error updating user:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.delete('/deleteUser/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        try{
+             User.findByIdAndDelete(id)
+             res.json({ message: "User deleted successfully" });
+        } catch (error) {
+            console.error("Error deleting user:", error.message);
+            res.status(500).json({ message: error.message });
+        }
+    } catch (error) {
+        console.error("Error deleting user:", error.message);
+        res.status(500).json({ message: error.message });
+    }
 });
