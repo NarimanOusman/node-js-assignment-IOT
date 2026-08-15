@@ -1,11 +1,23 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Users = () => {
-  const [users, setUsers] = useState([
-    { name: "Nariman", email: "nariman@gmail.com", age: "25" },
-  ]);
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/getUsers")
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching users:", error.message);
+      });
+  }, []);
+
   return (
     <div className="d-flex vh-100 bg-primary justify-content-center align-items-center ">
       <div className="w-50 bg-white rounded p-3">
@@ -24,16 +36,17 @@ const Users = () => {
           </thead>
 
           <tbody>
-            {users.map((users) => (
-              <tr>
-                <td>{users.name}</td>
-                <td>{users.email}</td>
-                <td>{users.age}</td>
+            {users.map((user) => (
+              <tr key={user._id}>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{user.age}</td>
                 <td>
-                  <button>Delete</button>
-                  <Link to="/update" className="btn btn-success">
+                  
+                  <Link to={`/update/${user._id}`} className="btn btn-success">
                     Edit
                   </Link>
+                  <button className="btn btn-danger">Delete</button>
                   
                 </td>
               </tr>
