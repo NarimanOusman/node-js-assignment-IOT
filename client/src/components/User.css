@@ -1,0 +1,314 @@
+/* --- DASHBOARD CARDS --- */
+
+.header{
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    color: var(--blazing-flame);
+    font-weight: bold;
+  
+   font-size: 2.5rem;
+}
+
+/* Outer wrapper to give horizontal padding/space from the screen edges */
+.cards-wrapper {
+  width: 100%;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  box-sizing: border-box;
+}
+
+.cards-holder {
+  display: flex;
+  gap: 2.25rem;
+  margin-bottom: 2rem;
+  flex-direction: row;
+  justify-content: center; /* Centers the cards nicely */
+}
+
+.dashboard-card {
+  flex: 1; /* Makes them share the row evenly */
+  max-width: 600px; /* Gives the cards a wider, more dashboard-like presence */
+  background-color: #ffffff;
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  padding: 0.5rem;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  border-top: 4px solid var(--autumn-ember);
+  border-left: 4px solid var(--autumn-ember);
+}
+
+.dashboard-card .card-body {
+  text-align: center;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-primary {
+  border-left-color: var(--autumn-ember); 
+}
+
+.card-success {
+  border-left-color: var(--autumn-ember); 
+}
+
+.card-subtitle {
+  text-transform: uppercase;
+  color: #034986;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+
+.card-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--autumn-ember);
+  margin-bottom: 0;
+}
+
+.card-unit {
+  font-size: 1.25rem;
+  color: #6c757d;
+  font-weight: normal;
+}
+
+.dashboard-intro {
+  text-align: center;
+
+  color: #34495e;
+  font-size: 1.25rem;
+
+  font-weight: 600;
+  
+  padding-bottom: 5%;
+ 
+  
+  transform: translateY(24px);
+  animation: slideUpFadeIn 0.7s ease-out forwards;
+}
+
+@keyframes slideUpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* --- TABLE SECTION & WRAPPER --- */
+.table-section-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  box-sizing: border-box;
+}
+
+.table-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(46, 46, 58, 0.08);
+  padding: 2.5rem; /* Increased padding inside the card for breathing room */
+  border-top: 1px solid var(--toasted-almond);
+}
+
+/* --- SEARCH BAR & ADD BUTTON BAR --- */
+.table-control-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem; /* Increased gap before table starts */
+  gap: 1.5rem;
+}
+
+.search-input {
+  width: 350px; /* Fixed maximum width so it doesn't stretch infinitely */
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--silver);
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  color: var(--shadow-grey);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--toasted-almond);
+  box-shadow: 0 0 0 3px rgba(222, 145, 81, 0.15);
+}
+
+.btn-add-user {
+  background-color: var(--toasted-almond);
+  color: #ffffff;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap; /* Prevents text wrapping */
+  transition: background-color 0.2s;
+}
+
+.btn-add-user:hover {
+  background-color: var(--autumn-ember);
+  color: #ffffff;
+}
+
+/* --- CUSTOM TABLE STYLING --- */
+.custom-dashboard-table {
+  margin-bottom: 0;
+}
+
+.custom-dashboard-table th {
+  color: var(--shadow-grey);
+  font-weight: 600;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid var(--silver);
+  padding: 1.15rem 1rem; /* More vertical padding for cleaner rows */
+}
+
+.custom-dashboard-table td {
+  padding: 1.15rem 1rem; /* Generous padding so rows don't feel congested */
+  color: var(--shadow-grey);
+  vertical-align: middle;
+}
+
+/* --- ROW ACTION BUTTONS --- */
+.btn-action {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.action-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+}
+
+.action-icon {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+.btn-edit {
+  background-color: var(--toasted-almond);
+  color: #ffffff;
+}
+
+.btn-edit:hover {
+  background-color: var(--autumn-ember);
+  color: #ffffff;
+}
+
+.btn-delete {
+  background-color: var(--blazing-flame);
+  color: #ffffff;
+}
+
+.btn-delete:hover {
+  opacity: 0.85;
+}
+
+/* --- CONFIRMATION MODALS --- */
+.confirm-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(16, 24, 40, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1050;
+}
+
+.confirm-modal {
+  width: min(92vw, 440px);
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 1.25rem 3rem rgba(15, 23, 42, 0.18);
+  border-top: 4px solid var(--toasted-almond);
+  animation: modalPopIn 0.2s ease-out;
+}
+
+.confirm-modal h3 {
+  margin-bottom: 0.75rem;
+  color: var(--shadow-grey);
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.confirm-modal p {
+  margin-bottom: 1.25rem;
+  color: #5f6b7a;
+  line-height: 1.6;
+}
+
+.confirm-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.btn-cancel,
+.btn-confirm {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-cancel {
+  background: #e9ecef;
+  color: #34495e;
+}
+
+.btn-confirm {
+  color: #ffffff;
+}
+
+.btn-add {
+  background-color: var(--toasted-almond);
+}
+
+.btn-update {
+  background-color: #198754;
+}
+
+.btn-confirm:hover,
+.btn-cancel:hover {
+  transform: translateY(-1px);
+}
+
+@keyframes modalPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
