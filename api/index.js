@@ -12,10 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Middleware to strip /api prefix if it exists
+// Middleware to handle /api prefix routing
 app.use((req, res, next) => {
+    // If path starts with /api/, strip it for internal routing
     if (req.path.startsWith('/api/')) {
         req.url = req.path.slice(4); // Remove /api prefix
+    }
+    // Handle root path redirects
+    if (req.path === '/api') {
+        req.url = '/';
     }
     next();
 });
