@@ -12,6 +12,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Middleware to strip /api prefix if it exists
+app.use((req, res, next) => {
+    if (req.path.startsWith('/api/')) {
+        req.url = req.path.slice(4); // Remove /api prefix
+    }
+    next();
+});
+
 mongoose.connect(mongoURI)
     .then(() => {
         console.log("Connected to MongoDB");
@@ -20,22 +28,23 @@ mongoose.connect(mongoURI)
         console.error("Error connecting to MongoDB:", error);
     });
 
-app.post('/createUser', async (req, res) => {
-    try {
-        const users = await User.create(req.body);    
-        res.json(users);
-    } catch (error) {
-        console.error("Error creating user:", error.message);
-        res.status(500).json({ message: error.message });
-    }
-});
-
+// Routes - remove /api prefix since middleware handles it
 app.get('/getUsers', async (req, res) => {
     try {
         const users = await User.find();    
         res.json(users);
     } catch (error) {
         console.error("Error fetching users:", error.message);
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post('/createUser', async (req, res) => {
+    try {
+        const users = await User.create(req.body);    
+        res.json(users);
+    } catch (error) {
+        console.error("Error creating user:", error.message);
         res.status(500).json({ message: error.message });
     }
 });
@@ -76,7 +85,7 @@ app.delete('/deleteUser/:id', async (req, res) => {
     try {
         const id = req.params.id;
         try{
-             User.findByIdAndDelete(id)
+             await User.findByIdAndDelete(id)
              res.json({ message: "User deleted successfully" });
         } catch (error) {
             console.error("Error deleting user:", error.message);
