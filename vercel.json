@@ -1,0 +1,14 @@
+{
+  "buildCommand": "npm install && cd client && npm install && npm run build",
+  "outputDirectory": "client/dist",
+  "framework": "vite",
+  "env": {
+    "MONGO_URI": "@mongo_uri"
+  },
+  "functions": {
+    "server/index.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}

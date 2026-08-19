@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import '../components/User.css'
+import API_BASE_URL from '../config/api.js'
 
 const Update = () => {
   const { id } = useParams();
@@ -13,7 +14,7 @@ const Update = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/getUser/${id}`)
+    axios.get(`${API_BASE_URL}/getUser/${id}`)
       .then((response) => {
         const userData = response.data;
         setName(userData.name);
@@ -32,7 +33,7 @@ const Update = () => {
   };
 
   const confirmUpdateUser = () => {
-    axios.put(`http://localhost:3000/updateUser/${id}`, { name, email, age })
+    axios.put(`${API_BASE_URL}/updateUser/${id}`, { name, email, age })
       .then((response) => {
         console.log("User updated:", response.data);
         setShowUpdateModal(false);
@@ -51,8 +52,8 @@ const Update = () => {
 
   return (
     <>
-      <div className="d-flex vh-100 bg-primary justify-content-center align-items-center ">
-        <div className="w-50 bg-white rounded p-3">
+      <div className="form-container">
+        <div className="form-card">
           <form onSubmit={handleUpdate}>
               <h1>Update User</h1>
               <div className="mb-2">

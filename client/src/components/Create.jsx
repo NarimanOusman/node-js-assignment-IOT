@@ -3,6 +3,7 @@ import { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import '../components/User.css'
+import API_BASE_URL from '../config/api.js'
 
 const Create = () => {
     const [name, setName] = useState("");
@@ -16,7 +17,7 @@ const Create = () => {
   };
 
   const confirmAddUser = () => {
-    axios.post("http://localhost:3000/createUser", { name, email, age })
+    axios.post(`${API_BASE_URL}/createUser`, { name, email, age })
             .then((response) => {
                 console.log("User created:", response.data);
         setShowAddModal(false);
@@ -35,8 +36,8 @@ const Create = () => {
 
   return (
     <>
-      <div className="d-flex vh-100 bg-primary justify-content-center align-items-center ">
-        <div className="w-50 bg-white rounded p-3">
+      <div className="form-container">
+        <div className="form-card">
           <form onSubmit={Submit}>
               <h1>Create User</h1>
               <div className="mb-2">

@@ -5,17 +5,21 @@ import { useEffect } from "react";
 import axios from "axios";
 import { Icon } from "@iconify/react";
 import '../components/User.css'
+import API_BASE_URL from '../config/api.js'
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 25;
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/getUsers")
+      .get(`${API_BASE_URL}/getUsers`)
       .then((response) => {
         setUsers(response.data);
+        setCurrentPage(1);
       })
       .catch((error) => {
         console.error("Error fetching users:", error.message);
@@ -23,12 +27,13 @@ const Users = () => {
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:3000/deleteUser/${id}`)
+    axios.delete(`${API_BASE_URL}/deleteUser/${id}`)
       .then((res) => {
         console.log(res);
         setUsers((currentUsers) => currentUsers.filter((user) => user._id !== id));
         setShowDeleteModal(false);
         setSelectedUser(null);
+        setCurrentPage(1);
       })
       .catch((err) => {
         console.log(err);
@@ -57,6 +62,29 @@ const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.email.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+// Pagination logic
+const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+const startIndex = (currentPage - 1) * usersPerPage;
+const endIndex = startIndex + usersPerPage;
+const currentUsers = filteredUsers.slice(startIndex, endIndex);
+
+const handleSearchChange = (e) => {
+  setSearchQuery(e.target.value);
+  setCurrentPage(1);
+};
+
+const handleNextPage = () => {
+  if (currentPage < totalPages) {
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+const handlePreviousPage = () => {
+  if (currentPage > 1) {
+    setCurrentPage(currentPage - 1);
+  }
+};
 
   return (
   <div>
@@ -104,7 +132,7 @@ const filteredUsers = users.filter((user) =>
               placeholder="Search by name or email..." 
               className="search-input"
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
             />
             <Link to="/create" className="btn-add-user">
               + Add User
@@ -123,8 +151,8 @@ const filteredUsers = users.filter((user) =>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.length > 0 ? (
-                  filteredUsers.map((user) => (
+                {currentUsers.length > 0 ? (
+                  currentUsers.map((user) => (
                     <tr key={user._id}>
                       <td className="fw-semibold text-dark">{user.name}</td>
                       <td className="text-muted">{user.email}</td>
@@ -149,6 +177,29 @@ const filteredUsers = users.filter((user) =>
               </tbody>
             </table>
           </div>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button 
+                className="btn-pagination"
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+              >
+                ← Previous
+              </button>
+              <span className="pagination-info">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button 
+                className="btn-pagination"
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+              >
+                Next →
+              </button>
+            </div>
+          )}
 
         </div>
       </div>

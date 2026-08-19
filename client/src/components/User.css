@@ -312,3 +312,126 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* --- PAGINATION CONTROLS --- */
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--silver);
+}
+
+.btn-pagination {
+  background-color: var(--toasted-almond);
+  color: #ffffff;
+  border: none;
+  padding: 0.7rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background-color: var(--autumn-ember);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(222, 145, 81, 0.2);
+}
+
+.btn-pagination:disabled {
+  background-color: #d9d9d9;
+  color: #999999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-info {
+  color: var(--shadow-grey);
+  font-weight: 600;
+  font-size: 0.95rem;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* --- FORM STYLING --- */
+.form-container {
+  background-color: #bc5d2e;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.form-card {
+  background-color: #ffffff;
+  border-radius: 0.875rem;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(46, 46, 58, 0.08);
+  width: 100%;
+  max-width: 500px;
+}
+
+.form-card h1 {
+  color: var(--shadow-grey);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-card .mb-2 {
+  margin-bottom: 1.25rem;
+}
+
+.form-card label {
+  color: var(--shadow-grey);
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.form-card .form-control {
+  border: 1px solid var(--silver);
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-card .form-control:focus {
+  border-color: var(--toasted-almond);
+  box-shadow: 0 0 0 3px rgba(222, 145, 81, 0.15);
+  outline: none;
+}
+
+.form-card .form-control::placeholder {
+  color: #9ca3af;
+}
+
+.form-card .btn {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.form-card .btn-success {
+  background-color: var(--toasted-almond);
+  color: #ffffff;
+}
+
+.form-card .btn-success:hover {
+  background-color: var(--autumn-ember);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(222, 145, 81, 0.2);
+}
