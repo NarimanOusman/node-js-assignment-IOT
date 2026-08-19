@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-import User from '../../server/model/Users.model.js';
+import User from './Users.model.js';
 
 dotenv.config();
 const mongoURI = process.env.MONGO_URI;
