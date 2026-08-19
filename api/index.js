@@ -1,4 +1,3 @@
-import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -7,99 +6,100 @@ import User from './Users.model.js';
 dotenv.config();
 const mongoURI = process.env.MONGO_URI;
 
-const app = express();
+// Initialize CORS middleware
+const corsMiddleware = cors();
 
-app.use(cors());
-app.use(express.json());
-
-// Middleware to handle /api prefix routing
-app.use((req, res, next) => {
-    // If path starts with /api/, strip it for internal routing
-    if (req.path.startsWith('/api/')) {
-        req.url = req.path.slice(4); // Remove /api prefix
-    }
-    // Handle root path redirects
-    if (req.path === '/api') {
-        req.url = '/';
-    }
-    next();
-});
-
-mongoose.connect(mongoURI)
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((error) => {
-        console.error("Error connecting to MongoDB:", error);
+// Helper to run middleware
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
     });
+  });
+}
 
-// Routes - remove /api prefix since middleware handles it
-app.get('/getUsers', async (req, res) => {
+// Ensure MongoDB connection
+let isConnected = false;
+async function ensureConnected() {
+  if (!isConnected) {
     try {
-        const users = await User.find();    
-        res.json(users);
+      await mongoose.connect(mongoURI);
+      isConnected = true;
+      console.log("Connected to MongoDB");
     } catch (error) {
-        console.error("Error fetching users:", error.message);
-        res.status(500).json({ message: error.message });
+      console.error("Error connecting to MongoDB:", error);
+      throw error;
     }
-});
+  }
+}
 
-app.post('/createUser', async (req, res) => {
-    try {
-        const users = await User.create(req.body);    
-        res.json(users);
-    } catch (error) {
-        console.error("Error creating user:", error.message);
-        res.status(500).json({ message: error.message });
+export default async function handler(req, res) {
+  // Enable CORS
+  await runMiddleware(req, res, corsMiddleware);
+  
+  res.setHeader('Content-Type', 'application/json');
+
+  try {
+    await ensureConnected();
+
+    const { method, url, body } = req;
+    
+    // Parse URL to get route and params
+    const [_, ...pathParts] = url.split('/').filter(Boolean);
+    const route = pathParts.join('/');
+    
+    // GET /getUsers
+    if (method === 'GET' && route === 'getUsers') {
+      const users = await User.find();
+      return res.status(200).json(users);
     }
-});
 
-app.get('/getUser/:id', async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-        res.json(user);
-    } catch (error) {
-        console.error("Error fetching user:", error.message);
-        res.status(500).json({ message: error.message });
+    // POST /createUser
+    if (method === 'POST' && route === 'createUser') {
+      const user = await User.create(body);
+      return res.status(200).json(user);
     }
-});
 
-app.put('/updateUser/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        const updatedUser = await User.findByIdAndUpdate(
-            { _id: id }, 
-            {
-                name: req.body.name,
-                email: req.body.email,
-                age: req.body.age
-            },
-            { new: true } 
-        );
-        res.json(updatedUser);
-    } catch (error) {
-        console.error("Error updating user:", error.message);
-        res.status(500).json({ message: error.message });
+    // GET /getUser/:id
+    if (method === 'GET' && route.startsWith('getUser/')) {
+      const id = route.split('/')[1];
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json(user);
     }
-});
 
-app.delete('/deleteUser/:id', async (req, res) => {
-    try {
-        const id = req.params.id;
-        try{
-             await User.findByIdAndDelete(id)
-             res.json({ message: "User deleted successfully" });
-        } catch (error) {
-            console.error("Error deleting user:", error.message);
-            res.status(500).json({ message: error.message });
-        }
-    } catch (error) {
-        console.error("Error deleting user:", error.message);
-        res.status(500).json({ message: error.message });
+    // PUT /updateUser/:id
+    if (method === 'PUT' && route.startsWith('updateUser/')) {
+      const id = route.split('/')[1];
+      const updatedUser = await User.findByIdAndUpdate(
+        { _id: id },
+        {
+          name: body.name,
+          email: body.email,
+          age: body.age
+        },
+        { new: true }
+      );
+      return res.status(200).json(updatedUser);
     }
-});
 
-export default app;
+    // DELETE /deleteUser/:id
+    if (method === 'DELETE' && route.startsWith('deleteUser/')) {
+      const id = route.split('/')[1];
+      await User.findByIdAndDelete(id);
+      return res.status(200).json({ message: "User deleted successfully" });
+    }
+
+    // Route not found
+    return res.status(404).json({ message: "Route not found" });
+
+  } catch (error) {
+    console.error("Error:", error.message);
+    return res.status(500).json({ message: error.message });
+  }
+}
